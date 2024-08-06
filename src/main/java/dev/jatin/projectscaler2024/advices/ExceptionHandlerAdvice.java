@@ -33,8 +33,12 @@ public class ExceptionHandlerAdvice {
     }
 
     @ExceptionHandler(InvalidProductIdException.class)
-    public ResponseEntity<exceptionDto> handleInvalidProductIdException(){
+    public ResponseEntity<exceptionDto> handleInvalidProductIdException(InvalidProductIdException exception){
         exceptionDto dto = new exceptionDto();
+
+        dto.setProductId(exception.getProductId());
+
+
         dto.setMessage("Id is Invalid,retry with new Id ");
         dto.setDetails("The entered Id is incorrect");
         return new ResponseEntity<>(dto, HttpStatus.BAD_REQUEST);

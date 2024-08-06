@@ -23,6 +23,7 @@ private ProductService productService;
 
     @GetMapping("/{id}")
     public ResponseEntity<Product> getProductById(@PathVariable("id") Long id) throws InvalidProductIdException {
+
         Product product = productService.getProductById(id);
 
         return new ResponseEntity<>(product, HttpStatus.OK); //using responce entity to give a httpstatus code

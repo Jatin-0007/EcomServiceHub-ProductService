@@ -7,7 +7,7 @@ import lombok.Setter;
 @Getter
 @Setter
 public class exceptionDto {
-
+private Long productId;
     private String message;
     private String details;
 }
