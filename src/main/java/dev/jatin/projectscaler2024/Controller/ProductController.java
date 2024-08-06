@@ -1,8 +1,10 @@
 package dev.jatin.projectscaler2024.Controller;
 
 import dev.jatin.projectscaler2024.Dto.ProductDto;
+import dev.jatin.projectscaler2024.exceptions.InvalidProductIdException;
 import dev.jatin.projectscaler2024.models.Product;
 import dev.jatin.projectscaler2024.service.ProductService;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -20,10 +22,13 @@ private ProductService productService;
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Product> getProductById(@PathVariable("id") Long id) {
+    public ResponseEntity<Product> getProductById(@PathVariable("id") Long id) throws InvalidProductIdException {
         Product product = productService.getProductById(id);
 
-        return new ResponseEntity<>(product, HttpStatusCode.valueOf(503)); //using responce entity to give a httpstatus code
+        return new ResponseEntity<>(product, HttpStatus.OK); //using responce entity to give a httpstatus code
+
+      //  int a = 1/0; // to check the exception is handelled this is for arthematic exception
+        //return null;
 
     }
 

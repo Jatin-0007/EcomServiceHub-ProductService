@@ -2,6 +2,7 @@ package dev.jatin.projectscaler2024.service;
 
 import dev.jatin.projectscaler2024.Dto.FakeStoreDto;
 import dev.jatin.projectscaler2024.Dto.ProductDto;
+import dev.jatin.projectscaler2024.exceptions.InvalidProductIdException;
 import dev.jatin.projectscaler2024.models.Category;
 import dev.jatin.projectscaler2024.models.Product;
 import org.springframework.http.HttpMethod;
@@ -51,9 +52,16 @@ public class FakeStoreProductService implements ProductService {
         return product;
     }
     @Override
-    public Product getProductById(Long id) {
+    public Product getProductById(Long id) throws InvalidProductIdException {
+
+
 
         FakeStoreDto fakeStoreDto = restTemplate.getForObject("https://fakestoreapi.com/products/"+id, FakeStoreDto.class);
+
+        if(fakeStoreDto == null){
+            throw new InvalidProductIdException("Invalid Product Id Passed");
+
+        }
 
         return convertFakestoreDtoToProduct(fakeStoreDto);
     }
