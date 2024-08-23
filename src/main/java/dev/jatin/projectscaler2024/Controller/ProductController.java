@@ -4,6 +4,7 @@ import dev.jatin.projectscaler2024.Dto.ProductDto;
 import dev.jatin.projectscaler2024.exceptions.InvalidProductIdException;
 import dev.jatin.projectscaler2024.models.Product;
 import dev.jatin.projectscaler2024.service.ProductService;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
@@ -17,7 +18,7 @@ import java.util.List;
 public class ProductController {
 private ProductService productService;
 
-    ProductController(ProductService productService){
+    ProductController(@Qualifier("SelfProductService") ProductService productService){
         this.productService = productService;
     }
 
@@ -27,6 +28,8 @@ private ProductService productService;
         Product product = productService.getProductById(id);
 
         return new ResponseEntity<>(product, HttpStatus.OK); //using responce entity to give a httpstatus code
+
+       // Using ResponseEntity allows you to: Explicitly set the HTTP status code that will be returned to the client.
 
       //  int a = 1/0; // to check the exception is handelled this is for arthematic exception
         //return null;
@@ -55,6 +58,7 @@ private ProductService productService;
 
     @DeleteMapping("/{id}")
     public void deleteProduct(@PathVariable("id") Long id) {
+        productService.deleteProductById(id);
 
     }
 
