@@ -9,7 +9,7 @@ import org.springframework.boot.autoconfigure.domain.EntityScan;
 
 @Getter
 @Setter
-@Entity(name="msc_product")
+@Entity
 public class Product extends BaseModel {
   //@Id //primary key annotation
  //  private Long id;

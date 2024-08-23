@@ -7,7 +7,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-@Entity(name="msc_category")  // custom name for ur table
+@Entity // custom name for ur table
 public class Category extends BaseModel {
 //@Id
     //private Long id;

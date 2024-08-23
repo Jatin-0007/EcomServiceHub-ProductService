@@ -39,9 +39,9 @@ public class SelfProductService implements ProductService {
     public Product getProductById(Long id) throws InvalidProductIdException {
         Optional<Product> optionalProduct = productRepo.findById(id);
 
-        if (optionalProduct.isEmpty()) {
-            return null;
-        }
+        if (optionalProduct.isEmpty()) throw new InvalidProductIdException(id,"Invalid ID");
+
+
         return optionalProduct.get();
     }
 
@@ -72,7 +72,26 @@ public class SelfProductService implements ProductService {
 
     @Override
     public Product updateProduct(Long id, ProductDto productdto) {
-       return null;
+       Product product = convertproductDtoToProduct(productdto);
+
+       Optional<Product> optionalProduct = productRepo.findById(id);
+
+       if (optionalProduct.isEmpty()) throw new RuntimeException();
+
+       if (product == null) throw new RuntimeException("Invalid Input");
+
+       Product currentProduct = optionalProduct.get();
+
+       if(product.getTitle() != null){
+           currentProduct.setTitle(product.getTitle());
+       }
+
+       if(product.getDescription() != null){
+           currentProduct.setDescription(product.getDescription());
+       }
+
+       return productRepo.save(currentProduct);
+
 
     }
 
