@@ -11,5 +11,6 @@ import lombok.Setter;
 public class Category extends BaseModel {
 //@Id
     //private Long id;
+
     private String title;
 }

@@ -84,7 +84,7 @@ public class FakeStoreProductService implements ProductService {
     }
 
     @Override
-    public Product createProduct(ProductDto productdto) {
+    public Product createProduct(Product product) {
         return null;
        // RequestCallback requestCallback = restTemplate.httpEntityCallback(productdto, ProductDto.class);
     //    HttpMessageConverterExtractor<ProductDto> responseExtractor = new HttpMessageConverterExtractor<>(ProductDto.class, restTemplate.getMessageConverters());
@@ -120,7 +120,15 @@ public class FakeStoreProductService implements ProductService {
     }
 
     @Override
-    public void deleteProductById(Long id) {
+    public void deleteProductId(Long id) throws InvalidProductIdException{
+
+        FakeStoreDto fakeStoreDto = restTemplate.getForObject("https://fakestoreapi.com/products/"+id, FakeStoreDto.class);
+
+        if(fakeStoreDto == null){
+            throw new InvalidProductIdException(id,"Invalid Product Id Passed");
+
+        }
+
         restTemplate.execute("https://fakestoreapi.com/products/"+id, HttpMethod.DELETE, null, null);
 
     }

@@ -51,14 +51,17 @@ public class SelfProductService implements ProductService {
     }
 
     @Override
-    public Product createProduct(ProductDto productdto) {
-        Product product = convertproductDtoToProduct(productdto);
+    public Product createProduct(Product product) {
+       // Product product = convertproductDtoToProduct(productdto);
 
-        Category category = product.getCategory();
-        if (category.getId() == null) {
-            Category savedCategory = categoryRepo.save(category);
-            product.setCategory(savedCategory);
-        }
+
+      //  Category category = product.getCategory();
+//        if (category.getId() == null) {
+// first save category then save product as category is a attribute of product and also a class
+// this is brute way to save category but optimised it via CASCADE.ALL
+//            Category savedCategory = categoryRepo.save(category);
+//            product.setCategory(savedCategory);
+//        }
         Product savedProduct = productRepo.save(product);
 
 
@@ -96,7 +99,11 @@ public class SelfProductService implements ProductService {
     }
 
    @Override
-    public void deleteProductById(Long id) {
+    public void deleteProductId(Long id) throws InvalidProductIdException {
+        Optional<Product> optionalProduct = productRepo.findById(id);
+        if (optionalProduct.isEmpty()) throw new InvalidProductIdException(id,"Invalid ID");
+
+        productRepo.deleteById(id);
 
     }
 }

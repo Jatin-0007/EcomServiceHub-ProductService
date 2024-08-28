@@ -13,11 +13,11 @@ public interface ProductService {
 
     List<Product> getAllProducts();
 
-    Product createProduct(ProductDto productdto);
+    Product createProduct(Product product);
 
     Product replaceProduct(Long id, ProductDto productdto);
 
     Product updateProduct(Long id, ProductDto productdto);
 
-    void deleteProductById(Long id);
+    void deleteProductId(Long id) throws InvalidProductIdException;
 }

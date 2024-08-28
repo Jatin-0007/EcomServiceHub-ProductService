@@ -42,8 +42,8 @@ private ProductService productService;
     }
 
     @PostMapping
-    public Product createProduct(@RequestBody ProductDto productDto) {
-        return productService.createProduct(productDto);
+    public Product createProduct(@RequestBody Product product) {
+        return productService.createProduct(product);
     }
 
     @PutMapping("/{id}")
@@ -57,8 +57,8 @@ private ProductService productService;
     }
 
     @DeleteMapping("/{id}")
-    public void deleteProduct(@PathVariable("id") Long id) {
-        productService.deleteProductById(id);
+    public void deleteProduct(@PathVariable("id") Long id) throws InvalidProductIdException {
+        productService.deleteProductId(id);
 
     }
 
