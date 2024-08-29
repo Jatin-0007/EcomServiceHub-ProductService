@@ -5,6 +5,8 @@ import dev.jatin.projectscaler2024.exceptions.InvalidProductIdException;
 import dev.jatin.projectscaler2024.models.Product;
 import dev.jatin.projectscaler2024.service.ProductService;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.data.domain.Page;
+import org.springframework.data.repository.query.Param;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
@@ -36,9 +38,9 @@ private ProductService productService;
 
     }
 
-    @GetMapping
-    public List<Product> getAllProducts() {
-        return  productService.getAllProducts();
+    @GetMapping("/")
+    public Page<Product> getAllProducts(@Param("pageNumber") int pageNumber, @Param("pageSize") int pageSize,@Param("sortDir") String sortDir) throws InvalidProductIdException {
+        return  productService.getAllProducts(pageNumber, pageSize,sortDir);
     }
 
     @PostMapping

@@ -6,10 +6,15 @@ import dev.jatin.projectscaler2024.models.Category;
 import dev.jatin.projectscaler2024.models.Product;
 import dev.jatin.projectscaler2024.repository.CategoryRepo;
 import dev.jatin.projectscaler2024.repository.ProductRepo;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+
+import static org.springframework.data.jpa.domain.JpaSort.of;
 
 @Service("SelfProductService")
 public class SelfProductService implements ProductService {
@@ -46,8 +51,10 @@ public class SelfProductService implements ProductService {
     }
 
     @Override
-    public List<Product> getAllProducts() {
-        return List.of();
+    public Page<Product> getAllProducts(int pageNumber, int pageSize,String sortDir) {
+        return productRepo.findAll(PageRequest.of(pageNumber,pageSize,
+                sortDir.equals("asc") ? Sort.by("price").ascending() :     // if sortDir=asc do ascending order else do desc.
+                        Sort.by("price").descending()));
     }
 
     @Override
