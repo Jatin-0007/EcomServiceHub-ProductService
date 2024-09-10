@@ -7,6 +7,7 @@ import dev.jatin.projectscaler2024.models.Category;
 import dev.jatin.projectscaler2024.models.Product;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.HttpMessageConverterExtractor;
@@ -20,8 +21,12 @@ import java.util.List;
 public class FakeStoreProductService implements ProductService {
 
     private RestTemplate restTemplate;
-    public FakeStoreProductService(RestTemplate restTemplate) {
+    private RedisTemplate redisTemplate;
+
+
+    public FakeStoreProductService(RestTemplate restTemplate,RedisTemplate redisTemplate) {
         this.restTemplate = restTemplate;
+        this.redisTemplate = redisTemplate;
     }
 
     public Product convertFakestoreDtoToProduct(FakeStoreDto fakeStoreDto) {
@@ -55,7 +60,13 @@ public class FakeStoreProductService implements ProductService {
     }
     @Override
     public Product getProductById(Long id) throws InvalidProductIdException {
+                                                                    //Table name             product id
+        Product product =(Product) redisTemplate.opsForHash().get("PRODUCTS","PRODUCTS_"+id);
 
+        if(product!=null){
+            //Cache Hit
+            return product;
+        }
 
 
         FakeStoreDto fakeStoreDto = restTemplate.getForObject("https://fakestoreapi.com/products/"+id, FakeStoreDto.class);
@@ -65,7 +76,11 @@ public class FakeStoreProductService implements ProductService {
 
         }
 
-        return convertFakestoreDtoToProduct(fakeStoreDto);
+        product = convertFakestoreDtoToProduct(fakeStoreDto);
+
+        redisTemplate.opsForHash().put("PRODUCTS","PRODUCTS_"+id,product);
+
+        return product;
     }
 
     @Override
